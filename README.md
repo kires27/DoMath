@@ -1,8 +1,4 @@
 
-### git add .
-### git commit -m ""
-### git push -u origin master
-
 ### git init
 ### git add . or git add --all
 ### git commit -m 'First commit'
