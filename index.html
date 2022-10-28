@@ -11,6 +11,10 @@
 </head>
 <body>
 
+    <div class="header">
+        <h1>Basic Math Problem Generator</h1>
+    </div>
+
     <div id="navbar">
         <div id="additionBar">Addition</div>
         <div id="subtractionBar">Subtraction</div>
@@ -21,13 +25,31 @@
     <div class="content"> 
         <div id="mathExamples">
             <h2 id="mathExample"></h2>
-            <input type="text" id="resultInput">
+            <input type="number" id="resultInput" class="resultInput">
+        </div>
+
+        <div id="settings">
+            <div>
+                <h3>Numbers</h3>
+                <input type="number" id="settingsNumber" class="resultInput" value="2" min="2">
+            </div>
+            <div>
+                <h3>From</h3>
+                <input type="number" id="settingsFrom" class="resultInput" value="1">
+            </div>
+            <div>
+                <h3>To</h3>
+                <input type="number" id="settingsTo" class="resultInput" value="10">
+            </div>
         </div>
         
-        <div id="examplesHistory"></div>
+        <div class="examplesHistory">
+            <h2 class="historyHeader">History</h2>
+            <div id="historyList"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
-    
+
 </body>
 </html>
