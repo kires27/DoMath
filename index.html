@@ -17,30 +17,38 @@
     </div>
 
     <div id="navbar">
-        <div id="additionBar">Addition</div>
-        <div id="subtractionBar">Subtraction</div>
-        <div id="multiplicationBar">Multiplication</div>
-        <div id="divisionBar">Division</div>
+        <div>
+            <div id="additionBar" onclick="additions()">Addition</div>
+            <div id="subtractionBar" onclick="subtractions()">Subtraction</div>
+        </div>
+        <div>
+            <div id="multiplicationBar" onclick="multiplications()">Multiplication</div>
+            <div id="divisionBar" onclick="divisions()">Division</div>
+        </div>
     </div>
 
     <div class="content"> 
         <div id="mathExamples">
-            <h2 id="mathExample"></h2>
-            <input type="number" id="resultInput" class="resultInput">
+            <button class="starter" onclick="starter()">START</button>
         </div>
 
         <div id="settings">
             <div>
                 <h3>Numbers</h3>
-                <input type="number" id="settingsNumber" class="resultInput" value="2" min="2">
+                <input type="text" id="settingsNumber" class="inputs iSettings" value="2" oninput="inputRedex()"> 
+                    <!-- TODO enter only 1 number cypher -->
             </div>
             <div>
                 <h3>From</h3>
-                <input type="number" id="settingsFrom" class="resultInput" value="1">
+                <input type="text" id="settingsFrom" class="inputs iSettings" value="1"  oninput="inputRedex()">
             </div>
             <div>
                 <h3>To</h3>
-                <input type="number" id="settingsTo" class="resultInput" value="10">
+                <input type="text" id="settingsTo" class="inputs iSettings" value="10"  oninput="inputRedex()">
+            </div>
+            <div>
+                <h3>Timer(s)</h3>
+                <input type="text" id="settingsTimer" class="inputs iSettings" value="5"  oninput="inputRedex()">
             </div>
         </div>
         

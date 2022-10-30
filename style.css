@@ -4,6 +4,7 @@
     --bgColor: rgb(24, 24, 24);
     --textColor: rgb(233, 233, 233);
     --buttonColor: rgb(39, 39, 39);
+    --buttonHover: rgb(78, 78, 78);
     --bgHistory: rgb(31, 31, 31);
     --correctColor: rgb(91, 233, 96);
     --incorrectColor: rgb(255, 129, 129);
@@ -28,13 +29,12 @@ h1 {
     margin: 1rem;
 }
 
-#navbar {
+#navbar div {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     margin: 1rem;
 }
-#navbar div {
+#navbar div div {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,6 +46,11 @@ h1 {
     padding: 8px 0px;
     background-color: var(--buttonColor);
     cursor: pointer;
+    transition: all .3s ease-in-out;
+}
+#navbar div div:hover {
+    background-color: var(--buttonHover);
+    font-size: 18px;
 }
 
 .content {
@@ -75,8 +80,8 @@ h1 {
     height: fit-content;
     width: fit-content;
 }
-.resultInput {
-    width: 60px;
+.inputs {
+    max-width: 80px;
     height: 30px;
     background-color: var(--buttonColor);
     color: white;
@@ -91,7 +96,9 @@ h1 {
 
 #settings {
     height: 50px;
-
+}
+.iSettings {
+    text-align: center;
 }
 
 .examplesHistory {
@@ -145,3 +152,17 @@ h1 {
         padding: 0;
     }
 }
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bgHistory); 
+}
+::-webkit-scrollbar-thumb {
+    background: var(--buttonColor); 
+    border-radius:10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--buttonHover); 
+} 
