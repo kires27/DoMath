@@ -14,121 +14,131 @@ const mExamples = document.getElementById("mathExamples") as HTMLDivElement;
 const mExample = document.getElementById("mathExample") as HTMLHeadingElement;
 const historyList = document.getElementById("historyList") as HTMLDivElement;
 
-const ofNumbers = (document.getElementById("settingsNumber") as HTMLInputElement).value;
-const fromNumber = (document.getElementById("settingsFrom") as HTMLInputElement).value;
-const toNumber = (document.getElementById("settingsTo") as HTMLInputElement).value;
-const timer = (document.getElementById("settingsTimer") as HTMLInputElement).value;
+const ofNumbers = () => (document.getElementById("settingsNumber") as HTMLInputElement).value;
+const fromNumber = () => (document.getElementById("settingsFrom") as HTMLInputElement).value;
+const toNumber = () => (document.getElementById("settingsTo") as HTMLInputElement).value;
+const timerS = () => (document.getElementById("settingsTimer") as HTMLInputElement).value;
+const getResults = () => document.getElementById("resultInput") as HTMLInputElement;
+
+const hScore1 = document.getElementById("historyScore1") as HTMLParagraphElement;
+const hScore2 = document.getElementById("historyScore2") as HTMLParagraphElement;
 
 let result:number = 1;
 let output:string = "";
-let mode:number = 0;
-let previousMode: number = 0; // TODO previous mode is for turning off timer and starting over
-let start:boolean = false;
+let mode:number = 1;
+let modeSwitch: number = 0; 
+let time = 0.1;
+let score1 = 0;
+let score2 = 0;
 
 function starter() {
-    start = true;
+    modeSwitch = mode;
     switchMode();
-    console.log(start);
 }
 
-function getResults() {
-    return document.getElementById("resultInput") as HTMLInputElement;
+
+function getTimer() { // TODO make work
+    const timer = document.getElementById("timer") as HTMLDivElement;
+    if (!timer) return;
+
+    timer.innerText = ""+(+timerS-0.1);
+    console.log(timer.innerHTML);
+    getTimer();
+
+    setTimeout(() => {
+        switchMode();
+    }, +timerS)
+}
+
+function insertResults(condition:boolean, output?:any) {
+    if (condition) {
+        mExamples.innerHTML = `
+            <div id="timer">00.00</div>
+            <div class="mathExample">
+                <h2 id="mathExample">${output}</h2>
+                <input type="text" id="resultInput" class="inputs" oninput="inputRedexResult()">
+            </div>`
+    } else {
+        mExamples.innerHTML = `<button class="starter" onclick="starter()">START</button>`
+    }
+}
+
+function randomNumbers() {
+    const constants: Array<number> = [];
+
+    console.log(ofNumbers());
+    for (let n=0; n<+ofNumbers(); n++) {
+        constants.push(
+            Math.floor(Math.random() * ((+toNumber())-(+fromNumber())+1))+(+fromNumber())
+        );  
+    }
+
+    return constants;
 }
 
 function additions() {
-    const constants: Array<number> = [];
+    mode = 1;
 
-    for (let n=0; n<+ofNumbers; n++) {
-        constants.push(
-            Math.floor(Math.random() * ((+toNumber)-(+fromNumber)+1))+(+fromNumber)
-        );  
-    }
-
+    const constants = randomNumbers();
+    
+    // TODO if number is negative put it in brackets 
     result = constants.reduce((a,b)=> a+b);
     output = constants.join(' + ')+' = ';
 
-    if (start) {
-        mExamples.innerHTML = `
-            <h2 id="mathExample">${output}</h2>
-            <input type="text" id="resultInput" class="inputs" oninput="inputRedex()">`
-    } else {
-        mExamples.innerHTML = `<button class="starter" onclick="starter()">START</button>`
-    } 
+    mode === modeSwitch ?
+        insertResults(true, output)
+        :
+        insertResults(false)
 
-    mode = 1;
-    start = false;
+    // start = false;
 }
 
 function subtractions() {
-    const constants: Array<number> = [];
+    mode = 2;
 
-    for (let n=0; n<+ofNumbers; n++) {
-        constants.push(
-            Math.floor(Math.random() * ((+toNumber)-(+fromNumber)+1))+(+fromNumber)
-        );  
-    }
+    const constants = randomNumbers();
 
     result = constants.reduce((a,b)=> a-b);
     output = constants.join(' - ')+' = ';
 
-    if (start) {
-        mExamples.innerHTML = `
-            <h2 id="mathExample">${output}</h2>
-            <input type="text" id="resultInput" class="inputs" oninput="inputRedex()">`
-    } else {
-        mExamples.innerHTML = `<button class="starter" onclick="starter()">START</button>`
-    } 
+    mode === modeSwitch ?
+        insertResults(true, output)
+        :
+        insertResults(false)
 
-    mode = 2;
-    start = false;
+    // start = false;
 }
 
 function multiplications() {
-    const constants: Array<number> = [];
+    mode = 3;
 
-    for (let n=0; n<+ofNumbers; n++) {
-        constants.push(
-            Math.floor(Math.random() * ((+toNumber)-(+fromNumber)+1))+(+fromNumber)
-        );  
-    }
+    const constants = randomNumbers();
 
     result = constants.reduce((a,b)=> a*b);
     output = constants.join(' x ')+' = ';
 
-    if (start) {
-        mExamples.innerHTML = `
-            <h2 id="mathExample">${output}</h2>
-            <input type="text" id="resultInput" class="inputs" oninput="inputRedex()">`
-    } else {
-        mExamples.innerHTML = `<button class="starter" onclick="starter()">START</button>`
-    } 
+    mode === modeSwitch ?
+        insertResults(true, output)
+        :
+        insertResults(false)
 
-    mode = 3;
-    start = false;
+    // start = false;
 }
 
 function divisions() {
-    const constants: Array<number> = [];
+    mode = 4;
 
-    for (let n=0; n<+ofNumbers; n++) {
-        constants.push(
-            Math.floor(Math.random() * ((+toNumber)-(+fromNumber)+1))+(+fromNumber)
-        );  
-    }
+    const constants = randomNumbers();
 
     result = constants.reduce((a,b)=> a/b);
     output = constants.join(' ÷ ')+' = ';
 
-    if (start) {
-        mExamples.innerHTML = `
-            <h2 id="mathExample">${output}</h2>
-            <input type="text" id="resultInput" class="inputs" oninput="inputRedex()">`
-    } else {
-        mExamples.innerHTML = `<button class="starter" onclick="starter()">START</button>`
-    } 
+    mode === modeSwitch ?
+        insertResults(true, output)
+        :
+        insertResults(false)
 
-    mode = 4;
-    start = false;
+    // start = false;
 }
 
 function eHistoryList(e:any) {
@@ -137,8 +147,16 @@ function eHistoryList(e:any) {
         e.preventDefault();
         let statement = "";
 
-        result === +getResults().value ? statement = "correct" : statement = "incorrect";
-
+        if (result === +getResults().value) {
+            statement = "correct";
+            score1 += 1;
+            hScore1.innerText = ""+score1;
+        } else {
+            statement = "incorrect";
+            score2 += 1;
+            hScore2.innerText = ""+score2;
+        }
+            
         historyList.innerHTML += 
             `<span class="${statement}"> ${output + ""+result}</span>`
 
@@ -158,21 +176,12 @@ function switchMode() {
         case 4: divisions(); break; 
         default: additions(); break; 
     }
-
-    start = true
 }
 
 function inputRedex() {  // input only numbers
     const input:string = document.activeElement ? document.activeElement?.id : "";
 
-    if (input === getResults().id) {
-        (document.getElementById(input) as HTMLInputElement).value =
-        (document.getElementById(input) as HTMLInputElement).value
-            .replace(/[^0-9-]/g, '').replace(/(\--*?)\--*/g, '$1').replace(/^0[^-]/, '0');
-
-        getResults().onkeydown = e => eHistoryList(e);
-    }
-    else if (input === "settingsNumber") {
+    if (input === "settingsNumber") {
         (document.getElementById(input) as HTMLInputElement).value =
         (document.getElementById(input) as HTMLInputElement).value
             .replace(/[^1-5]/d, '');
@@ -189,12 +198,22 @@ function inputRedex() {  // input only numbers
             .replace(/(\..*?)\..*/g, '$1')
             .replace(/^0[^.]/, '0');
     }
-
 }
 
-function ipt() {
-    setTimeout(switchMode, +timer)
-    
+function inputRedexResult() {
+    const input:string = document.activeElement ? document.activeElement?.id : "";
+
+    if (input === getResults().id) {
+        (document.getElementById(input) as HTMLInputElement).value =
+        (document.getElementById(input) as HTMLInputElement).value
+            // .replace(/[^0-9.-]/g, '').replace(/(\--*?)\--*/g, '$1').replace(/^0[^-]/, '0');
+            .replace(/[^0-9.-]/g, '')
+            .replace(/(\..*?)\..*/g, '$1')
+            .replace(/(\--*?)\--*/g, '$1');
+
+        getResults().onkeydown = e => eHistoryList(e);
+        // getTimer();
+    }
 }
 
-additions();
+switchMode();

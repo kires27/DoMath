@@ -22,11 +22,21 @@ body {
     position: relative;
     width: 100%;
 }
-h1 {
+.mathImg {
+    position: absolute;
+    z-index: -1;
+    margin: 0 0 0 1rem;
+    padding: 0;
+    height: 6em;
+    transform: rotate(-30deg);
+    opacity: 0.8;
+}
+.header h1 {
     text-align: center;
     color: var(--textColor);
     font-size: 2em;
     margin: 1rem;
+
 }
 
 #navbar div {
@@ -65,12 +75,51 @@ h1 {
     width: 100%;
 }
 
+#settings {
+    display: flex;
+    background-color: var(--bgHistory);
+    padding: 10px 0;
+    align-items: center;
+    justify-content: center;
+}
+#settings * {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: fit-content;
+}
+#settings * input {
+    padding: 0px 5px;
+    height: 25px;
+    width: 70%;
+    font-size: 11px;
+}
+#settings * h3 {
+    font-size: 0.55rem;
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
+    width: fit-content;
+}
+
 #mathExamples {
     display: flex;
+    flex-direction: column;
     background-color: var(--bgHistory);
     height: 80px;
     justify-content: center;
     align-items: center;
+}
+#timer {
+    font-size: 10px;
+    padding: 0 0 5px 0;
+    width: 94%;
+}
+.mathExample {
+    display: flex;
+    justify-content: center;
 }
 #mathExamples h2 {
     text-align: center;
@@ -79,6 +128,20 @@ h1 {
     padding: 0;
     height: fit-content;
     width: fit-content;
+}
+.starter {
+    border: none;
+    border-radius: 5px;
+    color: var(--textColor);
+    width: 33%;
+    font-size: 15px;
+    padding: 10px 5px;
+    background-color: var(--buttonHover);
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+.starter:hover {
+    font-size: 18px;
 }
 .inputs {
     max-width: 80px;
@@ -91,14 +154,7 @@ h1 {
     outline: none;
     border-radius: 5px;
     box-sizing: border-box;
-
-}
-
-#settings {
-    height: 50px;
-}
-.iSettings {
-    text-align: center;
+    font-family: 'Poppins', sans-serif;
 }
 
 .examplesHistory {
@@ -106,8 +162,19 @@ h1 {
     height: auto;
     text-align: center;
 }
-.historyHeader {
+.historyTitle {
     padding: 0;
+    margin: 15px 0 0 0;
+}
+.historyScore {
+    display: flex;
+    justify-content: center;
+}
+.historyScore * {
+    padding: 0;
+    margin: 0 2px;
+    width: fit-content;
+    font-size: 13px;
 }
 #historyList {
     margin: 20px 0;
@@ -124,28 +191,6 @@ h1 {
     color: var(--incorrectColor);
 }
 
-#settings {
-    display: flex;
-    background-color: var(--bgHistory);
-    height: 100px;
-    align-items: center;
-    justify-content: center;
-}
-#settings * {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-#settings * input {
-    padding: 4px;
-}
-#settings * h3 {
-    font-size: 12px;
-    padding: 0;
-    margin: 0;
-    width: fit-content;
-}
 
 @media only screen and (max-width: 630px) {
     body {

@@ -13,12 +13,14 @@
 <body>
 
     <div class="header">
+        <img src="https://i.pinimg.com/originals/8e/80/2a/8e802a0b020d2a38f427ac80a70d23b0.png" 
+            class="mathImg" alt="img">
         <h1>Basic Math Problem Generator</h1>
     </div>
 
     <div id="navbar">
         <div>
-            <div id="additionBar" onclick="additions()">Addition</div>
+            <div id="additionBar" accesskey="1" onclick="additions()">Addition</div>
             <div id="subtractionBar" onclick="subtractions()">Subtraction</div>
         </div>
         <div>
@@ -28,32 +30,37 @@
     </div>
 
     <div class="content"> 
-        <div id="mathExamples">
-            <button class="starter" onclick="starter()">START</button>
-        </div>
-
         <div id="settings">
             <div>
                 <h3>Numbers</h3>
-                <input type="text" id="settingsNumber" class="inputs iSettings" value="2" oninput="inputRedex()"> 
+                <input type="text" id="settingsNumber" class="inputs" value="2" oninput="inputRedex()"> 
                     <!-- TODO enter only 1 number cypher -->
             </div>
             <div>
                 <h3>From</h3>
-                <input type="text" id="settingsFrom" class="inputs iSettings" value="1"  oninput="inputRedex()">
+                <input type="text" id="settingsFrom" class="inputs" value="1" oninput="inputRedex()">
             </div>
             <div>
                 <h3>To</h3>
-                <input type="text" id="settingsTo" class="inputs iSettings" value="10"  oninput="inputRedex()">
+                <input type="text" id="settingsTo" class="inputs" value="10" oninput="inputRedex()">
             </div>
             <div>
                 <h3>Timer(s)</h3>
-                <input type="text" id="settingsTimer" class="inputs iSettings" value="5"  oninput="inputRedex()">
+                <input type="text" id="settingsTimer" class="inputs" value="5" oninput="inputRedex()">
             </div>
+        </div>
+
+        <div id="mathExamples">
+            <button class="starter" onclick="starter()">START</button>
         </div>
         
         <div class="examplesHistory">
-            <h2 class="historyHeader">History</h2>
+            <h2 class="historyTitle">History</h2>
+            <div class="historyScore">
+                <p id="historyScore1" class="correct">0</p>
+                <p>-</p>
+                <p id="historyScore2" class="incorrect">0</p>
+            </div>
             <div id="historyList"></div>
         </div>
     </div>
