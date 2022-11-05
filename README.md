@@ -6,4 +6,9 @@
 ### git remote -v
 ### git push origin master || git push -f origin master
 
+#### git push origin master --force
+* fetch first * 
+#### git pull 
+#### git push
+
 ### website: https://kire27.github.io/basic-math-problem-generator/

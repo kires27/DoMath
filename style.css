@@ -184,6 +184,11 @@ body {
 #historyList span {
     padding: 4px 0;
 }
+.sessionTitle {
+    margin: 0px;
+    font-size: 15px;
+    font-weight: 400;
+}
 .correct {
     color: var(--correctColor);
 }
