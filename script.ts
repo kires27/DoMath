@@ -112,8 +112,6 @@ function additions() {
     output = constants.join(" + ") + " = ";
 
     mode === modeSwitch ? insertResults(true, output) : insertResults(false);
-
-    // start = false;
 }
 
 function subtractions() {
@@ -125,8 +123,6 @@ function subtractions() {
     output = constants.join(" - ") + " = ";
 
     mode === modeSwitch ? insertResults(true, output) : insertResults(false);
-
-    // start = false;
 }
 
 function multiplications() {
@@ -138,8 +134,6 @@ function multiplications() {
     output = constants.join(" x ") + " = ";
 
     mode === modeSwitch ? insertResults(true, output) : insertResults(false);
-
-    // start = false;
 }
 
 function divisions() {
@@ -151,8 +145,6 @@ function divisions() {
     output = constants.join(" ÷ ") + " = ";
 
     mode === modeSwitch ? insertResults(true, output) : insertResults(false);
-
-    // start = false;
 }
 
 function eHistoryList(e: any) {
@@ -228,7 +220,7 @@ function switchMode() {
 }
 
 function inputRedex() {
-    // input only numbers
+    // TODO input only numbers
     const input: string = document.activeElement
         ? document.activeElement?.id
         : "";
@@ -269,7 +261,6 @@ function inputRedexResult() {
             .replace(/(\--*?)\--*/g, "$1");
 
         getResults().onkeydown = (e) => eHistoryList(e);
-        // getTimer();
     }
 }
 
