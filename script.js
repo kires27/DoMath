@@ -166,7 +166,9 @@ function inputRedex() {
         ? (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.id
         : "";
     if (input === "settingsNumber") {
-        document.getElementById(input).value = document.getElementById(input).value.replace(/[^1-5]/d, "");
+        // (document.getElementById(input) as HTMLInputElement).value = (
+        //     document.getElementById(input) as HTMLInputElement
+        // ).value.replace(/[^1-5]/d, "");
     }
     else if (input === "settingsFrom" || input === "settingsTo") {
         document.getElementById(input).value = document.getElementById(input).value
