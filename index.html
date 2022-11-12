@@ -32,29 +32,47 @@
     <div class="content"> 
         <div id="settings">
             <div>
-                <h3>Numbers</h3>
-                <input type="text" id="settingsNumber" 
-                    class="inputs" value="2" 
-                    inputmode="numeric" maxlength="1"
-                    oninput="inputRedex()"> 
-                    <!-- TODO enter only 1 number cypher -->
+                <div>
+                    <h3>Numbers</h3>
+                    <p id="rangeNumber"></p>
+                </div>
+                <input type="range" id="settingsNumber" 
+                    class="inputRange" min="2" max="5" value="2"
+                    oninput="inputRange()"> 
             </div>
             <div>
-                <h3>From</h3>
-                <input type="number" id="settingsFrom" class="inputs" value="1" inputmode="numeric" oninput="inputRedex()">
+                <div>
+                    <h3>From</h3>
+                    <p id="rangeFrom"></p>
+                </div>
+                <input type="range" id="settingsFrom" class="inputRange" 
+                    min="-1000" max="1000" step="10" value="1" 
+                    oninput="inputRange()">
             </div>
             <div>
-                <h3>To</h3>
-                <input type="number" id="settingsTo" class="inputs" value="10" inputmode="numeric" oninput="inputRedex()">
+                <div>
+                    <h3>To</h3>
+                    <p id="rangeTo"></p>
+                </div>
+                <input type="range" id="settingsTo" class="inputRange" 
+                    min="-1000" max="1000" step="10" value="10" 
+                    oninput="inputRange()">
             </div>
             <div>
-                <h3>Timer (s)</h3>
-                <input type="number" id="settingsTimer" class="inputs" value="60" inputmode="numeric" oninput="inputRedex()">
+                <div>
+                    <h3>Timer (sec.)</h3>
+                    <p id="rangeTimer"></p>
+                </div>
+                <input type="range" id="settingsTimer" class="inputRange" 
+                    value="30" min="15" max="600" step="15" 
+                    oninput="inputRange()">
             </div>
         </div>
 
         <div id="mathExamples">
-            <button class="starter" onclick="starter()">START</button>
+            <div id="timer"></div>
+
+            <div id="mathExample" class="mathExample"></div>
         </div>
         
         <div class="examplesHistory">

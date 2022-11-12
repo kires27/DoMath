@@ -1,17 +1,25 @@
-// https://blog.hubspot.com/website/css-hover-animation#:~:text=What%20is%20a%20CSS%20hover,to%20enhance%20your%20site's%20interactivity.
-// https://stackoverflow.com/questions/469357/html-text-input-allow-only-numeric-input
-// https://css-tricks.com/finger-friendly-numerical-inputs-with-inputmode/
-// <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
-////////////////////////////////////////////
+/*
+css transition
+    https://blog.hubspot.com/website/css-hover-animation#:~:text=What%20is%20a%20CSS%20hover,to%20enhance%20your%20site's%20interactivity.
+input numeric values
+    https://stackoverflow.com/questions/469357/html-text-input-allow-only-numeric-input
+numerical keyboard
+    https://css-tricks.com/finger-friendly-numerical-inputs-with-inputmode/
+input types
+    https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+css input range
+    https://www.cssportal.com/style-input-range/
+animation
+    https://www.kirupa.com/html5/animating_with_requestAnimationFrame.htm
+convert dates
+    https://linuxhint.com/convert-numbers-dates-javascript/#:~:text=To%20convert%20a%20number%20into,into%20date%20format%20in%20JavaScript.
+*/
 
-// const addition = document.getElementById("additionBar") as HTMLDivElement;
-// const subtraction = document.getElementById("subtractionBar") as HTMLDivElement;
-// const multiplication = document.getElementById("multiplicationBar") as HTMLDivElement;
-// const division = document.getElementById("divisionBar") as HTMLDivElement;
 
-const mExamples = document.getElementById("mathExamples") as HTMLDivElement;
+const navbar = document.getElementById("navbar") as HTMLDivElement;
+
 const timer = () => document.getElementById("timer") as HTMLDivElement;
-const mExample = document.getElementById("mathExample") as HTMLHeadingElement;
+const mExample = document.getElementById("mathExample") as HTMLDivElement;
 const historyList = document.getElementById("historyList") as HTMLDivElement;
 
 const ofNumbers = () =>
@@ -21,7 +29,7 @@ const fromNumber = () =>
 const toNumber = () =>
     (document.getElementById("settingsTo") as HTMLInputElement).value;
 const timerS = () =>
-    +(document.getElementById("settingsTimer") as HTMLInputElement).value * 120;
+    +(document.getElementById("settingsTimer") as HTMLInputElement).value;
 const getResults = () =>
     document.getElementById("resultInput") as HTMLInputElement;
 
@@ -32,130 +40,168 @@ const hScore2 = document.getElementById(
     "historyScore2"
 ) as HTMLParagraphElement;
 
+const rangeNumber = document.getElementById("rangeNumber") as HTMLInputElement;
+const rangeFrom = document.getElementById("rangeFrom") as HTMLInputElement;
+const rangeTo = document.getElementById("rangeTo") as HTMLInputElement;
+const rangeTimer = document.getElementById("rangeTimer") as HTMLInputElement;
+
 let result: number = 1;
 let output: string = "";
-let mode: number = 1;
-let modeSwitch: number = 0;
-let time = timerS();
-let timeLength = ("" + time).length;
+
 let score1 = 0;
 let score2 = 0;
 let sScore1 = 0;
 let sScore2 = 0;
-let timerFrameId: any;
+
+let mode = 1;
 let sessionN = 0;
 
+let lastExample:any;
+
+navbar.onclick = () => insertResults(false);
+
+const getTimer = () => {
+    const endTime = Date.now() + timerS() * 1000;
+    let repeat = 1;
+    
+    let t = setInterval(() => {
+        let present = Date.now();
+        let interval = endTime - present;
+    
+        if (timer()) timer().innerText = `${Math.floor(interval/1000)}`;
+    
+        if (interval <= 0) {
+            clearInterval(t);
+            timer().innerText = "";
+            sessionN += 1;
+            switchMode();
+            session(sessionN, timerS(), sScore1, sScore2);
+        }
+
+        navbar.onclick = () => {
+            clearInterval(t);
+            timer().innerText = "";
+            insertResults(false);
+        }
+
+        repeat = 1000;
+    }, repeat);
+}
+
+// let time = timerS();
+// function getTimer() {
+
+//     if (timer()) timer().innerText = ""+time;
+
+//     setTimeout(() => {
+//         time--;
+//         console.log(time);
+    
+//         if (time < 0) {
+//             modeSwitch = 0;
+//             sessionN += 1;
+//             switchMode();
+//             session(sessionN, timerS(), sScore1, sScore2);
+//             return () => cancelTimer();
+//         }
+
+//         timerFrameId = window.requestAnimationFrame(getTimer);
+//     }, 1000);
+// }
+// const cancelTimer = () => window.cancelAnimationFrame(timerFrameId);
+
+
 function starter() {
-    modeSwitch = mode;
-    time = timerS();
     switchMode();
     getTimer();
 }
 
-function getTimer() {
-    // let seconds = ((time % 60000) / 1000).toFixed(0);
-    // let minutes = Math.floor(time / 60000);
-    // timer().innerText = minutes+":"+seconds;
-    if (timer()) timer().innerText = "" + Math.floor(time / 120);
-
-    time--;
-
-    if (time <= 0) {
-        modeSwitch = 0;
-        sessionN += 1;
-        switchMode();
-        session(sessionN, timerS() / 120, sScore1, sScore2);
-        return () => {
-            window.cancelAnimationFrame(timerFrameId);
-        };
-    }
-
-    timerFrameId = window.requestAnimationFrame(getTimer);
-}
-
 function insertResults(condition: boolean, output?: any) {
     if (condition) {
-        mExamples.innerHTML = `
-            <div id="timer"></div>
-            <div class="mathExample">
-                <h2 id="mathExample">${output}</h2>
-                <input type="number" id="resultInput" class="inputs" oninput="inputRedexResult()">
-            </div>`;
+        mExample.innerHTML = `
+            <h2 id="mathExample">${output}</h2>
+            <input type="text" id="resultInput" inputmode="numeric" 
+                class="inputs" oninput="inputRedexResult()">
+        `;
 
         getResults().select();
     } else {
-        mExamples.innerHTML = `<button class="starter" onclick="starter()">START</button>`;
+        mExample.innerHTML = `<button class="starter" 
+            onclick="starter()">START</button>
+        `;
     }
 }
 
 function randomNumbers() {
     const constants: Array<number> = [];
+    let number:any;
 
     for (let n = 0; n < +ofNumbers(); n++) {
-        constants.push(
-            Math.floor(Math.random() * (+toNumber() - +fromNumber() + 1)) +
-                +fromNumber()
-        );
+        const randomNumber = () => Math.floor(Math.random() * (+toNumber() - +fromNumber() + 1)) +
+            +fromNumber()
+        number = randomNumber();
+
+        constants.push(number != 0 ? number : 1);
+
+        console.log(constants);
     }
+
+    if (lastExample === constants) randomNumbers();
+    else lastExample = constants;
 
     return constants;
 }
 
 function additions() {
     mode = 1;
-
     const constants = randomNumbers();
 
-    // TODO if number is negative put it in brackets
     result = constants.reduce((a, b) => a + b);
     output = constants.join(" + ") + " = ";
 
-    mode === modeSwitch ? insertResults(true, output) : insertResults(false);
+    insertResults(true, output);
 }
 
 function subtractions() {
     mode = 2;
-
     const constants = randomNumbers();
 
     result = constants.reduce((a, b) => a - b);
     output = constants.join(" - ") + " = ";
 
-    mode === modeSwitch ? insertResults(true, output) : insertResults(false);
+    insertResults(true, output);
 }
 
 function multiplications() {
     mode = 3;
-
     const constants = randomNumbers();
 
     result = constants.reduce((a, b) => a * b);
     output = constants.join(" x ") + " = ";
 
-    mode === modeSwitch ? insertResults(true, output) : insertResults(false);
+    insertResults(true, output);
 }
 
 function divisions() {
     mode = 4;
-
     const constants = randomNumbers();
 
-    result = constants.reduce((a, b) => a / b);
+    result = Math.round(constants.reduce((a, b) => a / b)*10)/10;
     output = constants.join(" ÷ ") + " = ";
 
-    mode === modeSwitch ? insertResults(true, output) : insertResults(false);
+    insertResults(true, output);
 }
 
 function eHistoryList(e: any) {
-    console.log("history");
     if (e.key === "Enter") {
         e.preventDefault();
+
         let statement = "";
 
         if (result === +getResults().value) {
             statement = "correct";
             score1 += 1;
-            score1 += 1;
+            sScore1 += 1;
             hScore1.innerText = "" + score1;
         } else {
             statement = "incorrect";
@@ -191,9 +237,6 @@ function session(
     <h3 class="sessionTitle">Session ${sessionN} - ${time} sec</h3>
     `;
 
-    console.log(sScore2);
-    console.log(sScore2);
-
     sScore1 = 0;
     sScore2 = 0;
 }
@@ -218,45 +261,22 @@ function switchMode() {
     }
 }
 
-function inputRedex() {
-    // TODO input only numbers
-    const inputId: string = document.activeElement
-        ? document.activeElement?.id
-        : "";
-    const element = document.getElementById(inputId) as HTMLInputElement;
-
-    if (inputId === "settingsNumber") {
-        element.value = element.value.replace(/[^2-5]/, "");
-        // if (element.value.length > 1) element.value = element.value.slice(0, 1);
-    } else if (inputId === "settingsFrom" || inputId === "settingsTo") {
-        element.value = element.value
-            .replace(/[^0-9-]/g, "")
-            .replace(/(\--*?)\--*/g, "$1")
-            .replace(/^0[^-]/, "0");
-    } else if (inputId === "settingsTimer") {
-        element.value = element.value
-            .replace(/[^0-9.]/g, "")
-            .replace(/(\..*?)\..*/g, "$1")
-            .replace(/^0[^.]/, "0");
-    }
+function inputRange() {
+    rangeNumber.innerText = "" + ofNumbers();
+    rangeFrom.innerText = "" + fromNumber();
+    rangeTo.innerText = "" + toNumber();
+    rangeTimer.innerText = "" + timerS();
 }
 
 function inputRedexResult() {
-    const input: string = document.activeElement
-        ? document.activeElement?.id
-        : "";
-
-    if (input === getResults().id) {
-        (document.getElementById(input) as HTMLInputElement).value = (
-            document.getElementById(input) as HTMLInputElement
-        ).value
-            // .replace(/[^0-9.-]/g, '').replace(/(\--*?)\--*/g, '$1').replace(/^0[^-]/, '0');
-            .replace(/[^0-9.-]/g, "")
-            .replace(/(\..*?)\..*/g, "$1")
-            .replace(/(\--*?)\--*/g, "$1");
-
-        getResults().onkeydown = (e) => eHistoryList(e);
-    }
+    getResults().value = getResults()
+        .value
+        .replace(/[^-0-9.]/g, "")
+        .replace(/(\..*?)\..*/g, "$1")
+        .replace(/(\--*?)\--*/g, "$1");
+        
+    getResults().onkeydown = (e) => eHistoryList(e);
 }
 
 switchMode();
+inputRange();

@@ -11,4 +11,4 @@
 #### git pull 
 #### git push
 
-### website: https://kire27.github.io/basic-math-problem-generator/
+### website: www.domath.haam.space
