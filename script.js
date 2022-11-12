@@ -66,7 +66,7 @@ function getTimer() {
 }
 function insertResults(condition, output) {
     if (condition) {
-        mExamples.innerHTML = "\n            <div id=\"timer\">00.00</div>\n            <div class=\"mathExample\">\n                <h2 id=\"mathExample\">".concat(output, "</h2>\n                <input type=\"text\" id=\"resultInput\" class=\"inputs\" oninput=\"inputRedexResult()\">\n            </div>");
+        mExamples.innerHTML = "\n            <div id=\"timer\"></div>\n            <div class=\"mathExample\">\n                <h2 id=\"mathExample\">".concat(output, "</h2>\n                <input type=\"text\" id=\"resultInput\" class=\"inputs\" pattern=\"d*\" oninput=\"inputRedexResult()\">\n            </div>");
         getResults().select();
     }
     else {
@@ -88,7 +88,6 @@ function additions() {
     result = constants.reduce(function (a, b) { return a + b; });
     output = constants.join(" + ") + " = ";
     mode === modeSwitch ? insertResults(true, output) : insertResults(false);
-    // start = false;
 }
 function subtractions() {
     mode = 2;
@@ -96,7 +95,6 @@ function subtractions() {
     result = constants.reduce(function (a, b) { return a - b; });
     output = constants.join(" - ") + " = ";
     mode === modeSwitch ? insertResults(true, output) : insertResults(false);
-    // start = false;
 }
 function multiplications() {
     mode = 3;
@@ -104,7 +102,6 @@ function multiplications() {
     result = constants.reduce(function (a, b) { return a * b; });
     output = constants.join(" x ") + " = ";
     mode === modeSwitch ? insertResults(true, output) : insertResults(false);
-    // start = false;
 }
 function divisions() {
     mode = 4;
@@ -112,7 +109,6 @@ function divisions() {
     result = constants.reduce(function (a, b) { return a / b; });
     output = constants.join(" ÷ ") + " = ";
     mode === modeSwitch ? insertResults(true, output) : insertResults(false);
-    // start = false;
 }
 function eHistoryList(e) {
     console.log("history");
@@ -165,7 +161,7 @@ function switchMode() {
 }
 function inputRedex() {
     var _a;
-    // input only numbers
+    // TODO input only numbers
     var input = document.activeElement
         ? (_a = document.activeElement) === null || _a === void 0 ? void 0 : _a.id
         : "";
@@ -197,7 +193,6 @@ function inputRedexResult() {
             .replace(/(\..*?)\..*/g, "$1")
             .replace(/(\--*?)\--*/g, "$1");
         getResults().onkeydown = function (e) { return eHistoryList(e); };
-        // getTimer();
     }
 }
 switchMode();

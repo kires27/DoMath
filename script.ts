@@ -77,10 +77,10 @@ function getTimer() {
 function insertResults(condition: boolean, output?: any) {
     if (condition) {
         mExamples.innerHTML = `
-            <div id="timer">00.00</div>
+            <div id="timer"></div>
             <div class="mathExample">
                 <h2 id="mathExample">${output}</h2>
-                <input type="text" id="resultInput" class="inputs" oninput="inputRedexResult()">
+                <input type="text" id="resultInput" class="inputs" pattern="\d*" oninput="inputRedexResult()">
             </div>`;
 
         getResults().select();
