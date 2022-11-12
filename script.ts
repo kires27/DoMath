@@ -80,7 +80,7 @@ function insertResults(condition: boolean, output?: any) {
             <div id="timer"></div>
             <div class="mathExample">
                 <h2 id="mathExample">${output}</h2>
-                <input type="text" id="resultInput" class="inputs" pattern="\d*" oninput="inputRedexResult()">
+                <input type="number" id="resultInput" class="inputs" oninput="inputRedexResult()">
             </div>`;
 
         getResults().select();
