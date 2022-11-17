@@ -46,7 +46,8 @@ const rangeTo = document.getElementById("rangeTo") as HTMLInputElement;
 const rangeTimer = document.getElementById("rangeTimer") as HTMLInputElement;
 
 let result: number = 1;
-let output: string = "";
+let output: string;
+let answer: string;
 
 let score1 = 0;
 let score2 = 0;
@@ -56,32 +57,39 @@ let sScore2 = 0;
 let mode = 1;
 let sessionN = 0;
 
-let lastExample:any;
+let lastExample: number[];
+let lastResult: any;
 
 navbar.onclick = () => insertResults(false);
 
 const getTimer = () => {
     const endTime = Date.now() + timerS() * 1000;
-    let repeat = 1;
+    let repeat;
     
     let t = setInterval(() => {
         let present = Date.now();
-        let interval = endTime - present;
-    
-        if (timer()) timer().innerText = `${Math.floor(interval/1000)}`;
+        let interval = Math.floor((endTime - present)/1000);
+
+        if (timer()) timer().innerText = `${interval}`;
     
         if (interval <= 0) {
             clearInterval(t);
             timer().innerText = "";
             sessionN += 1;
-            switchMode();
             session(sessionN, timerS(), sScore1, sScore2);
+            switchMode(false);
         }
 
         navbar.onclick = () => {
-            clearInterval(t);
-            timer().innerText = "";
             insertResults(false);
+            
+            if (interval) {
+                clearInterval(t);
+                timer().innerText = "";
+                sessionN += 1;
+                session(sessionN, timerS()-interval, sScore1, sScore2);
+                interval = 0;
+            }
         }
 
         repeat = 1000;
@@ -134,16 +142,19 @@ function insertResults(condition: boolean, output?: any) {
 
 function randomNumbers() {
     const constants: Array<number> = [];
-    let number:any;
+    let number: number;
 
     for (let n = 0; n < +ofNumbers(); n++) {
-        const randomNumber = () => Math.floor(Math.random() * (+toNumber() - +fromNumber() + 1)) +
-            +fromNumber()
+        const randomNumber = () => Math.floor(Math.random() * 
+            (+toNumber() - +fromNumber() + 1)) + +fromNumber();
+        
         number = randomNumber();
 
-        constants.push(number != 0 ? number : 1);
-
-        console.log(constants);
+        if (number === 0) {
+            console.log("0 detected");
+            n-- 
+        }
+        else constants.push(number);
     }
 
     if (lastExample === constants) randomNumbers();
@@ -157,9 +168,19 @@ function additions() {
     const constants = randomNumbers();
 
     result = constants.reduce((a, b) => a + b);
-    output = constants.join(" + ") + " = ";
+    
+    if (lastResult === result) {
+        console.log("corrected results");
+        additions();
+    }
+    else {
+        lastResult = result;
+        
+        output = constants.join(" + ") + " = ";
+    
+        insertResults(true, output);
+    }
 
-    insertResults(true, output);
 }
 
 function subtractions() {
@@ -193,6 +214,7 @@ function divisions() {
 }
 
 function eHistoryList(e: any) {
+    console.log(e);
     if (e.key === "Enter") {
         e.preventDefault();
 
@@ -202,22 +224,22 @@ function eHistoryList(e: any) {
             statement = "correct";
             score1 += 1;
             sScore1 += 1;
+            answer = "";
             hScore1.innerText = "" + score1;
         } else {
             statement = "incorrect";
             score2 += 1;
             sScore2 += 1;
+            answer = `<span class="answer">
+                (${getResults().value})</span>`
             hScore2.innerText = "" + score2;
         }
 
-        historyList.innerHTML += `<span class="${statement}"> ${
-            output + "" + result
-        }</span>`;
+        historyList.innerHTML += `<span class="${statement}"> 
+            ${output + ""+result} ${answer} </span>`;
 
         getResults().value = "";
-
         switchMode();
-
         getResults().select();
     }
 }
@@ -241,7 +263,9 @@ function session(
     sScore2 = 0;
 }
 
-function switchMode() {
+function switchMode(nsp: boolean = true) {  // nsp: new session pause
+    if (!nsp) return insertResults(false);
+
     switch (mode) {
         case 1:
             additions();
@@ -255,9 +279,7 @@ function switchMode() {
         case 4:
             divisions();
             break;
-        default:
-            additions();
-            break;
+        default: break;
     }
 }
 
@@ -278,5 +300,5 @@ function inputRedexResult() {
     getResults().onkeydown = (e) => eHistoryList(e);
 }
 
-switchMode();
+insertResults(false);
 inputRange();

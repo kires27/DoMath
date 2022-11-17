@@ -218,6 +218,13 @@ body {
 .incorrect {
     color: var(--incorrectColor);
 }
+.answer {
+    color: var(--buttonHover);
+    position: absolute;
+    width: fit-content;
+    margin-top: -3.5px;
+    margin-left: 1rem;
+}
 
 
 @media only screen and (max-width: 630px) {

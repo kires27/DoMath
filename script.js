@@ -15,11 +15,6 @@ convert dates
     https://linuxhint.com/convert-numbers-dates-javascript/#:~:text=To%20convert%20a%20number%20into,into%20date%20format%20in%20JavaScript.
 */
 var navbar = document.getElementById("navbar");
-// const addition = document.getElementById("additionBar") as HTMLDivElement;
-// const subtraction = document.getElementById("subtractionBar") as HTMLDivElement;
-// const multiplication = document.getElementById("multiplicationBar") as HTMLDivElement;
-// const division = document.getElementById("divisionBar") as HTMLDivElement;
-// const mExamples = document.getElementById("mathExamples") as HTMLDivElement;
 var timer = function () { return document.getElementById("timer"); };
 var mExample = document.getElementById("mathExample");
 var historyList = document.getElementById("historyList");
@@ -45,39 +40,41 @@ var rangeFrom = document.getElementById("rangeFrom");
 var rangeTo = document.getElementById("rangeTo");
 var rangeTimer = document.getElementById("rangeTimer");
 var result = 1;
-var output = "";
+var output;
+var answer;
 var score1 = 0;
 var score2 = 0;
 var sScore1 = 0;
 var sScore2 = 0;
-var timerFrameId;
+var mode = 1;
 var sessionN = 0;
 var lastExample;
-var ofNumbersRange;
-var fromNumberRange;
-var toNumberRange;
-var timerRange;
+var lastResult;
 navbar.onclick = function () { return insertResults(false); };
-// const cancelTimer = () => window.cancelAnimationFrame(timerFrameId);
 var getTimer = function () {
     var endTime = Date.now() + timerS() * 1000;
-    var repeat = 1;
+    var repeat;
     var t = setInterval(function () {
         var present = Date.now();
-        var interval = endTime - present;
+        var interval = Math.floor((endTime - present) / 1000);
         if (timer())
-            timer().innerText = "".concat(Math.floor(interval / 1000));
+            timer().innerText = "".concat(interval);
         if (interval <= 0) {
             clearInterval(t);
             timer().innerText = "";
             sessionN += 1;
-            switchMode();
             session(sessionN, timerS(), sScore1, sScore2);
+            switchMode(false);
         }
         navbar.onclick = function () {
-            clearInterval(t);
-            timer().innerText = "";
             insertResults(false);
+            if (interval) {
+                clearInterval(t);
+                timer().innerText = "";
+                sessionN += 1;
+                session(sessionN, timerS() - interval, sScore1, sScore2);
+                interval = 0;
+            }
         };
         repeat = 1000;
     }, repeat);
@@ -98,6 +95,7 @@ var getTimer = function () {
 //         timerFrameId = window.requestAnimationFrame(getTimer);
 //     }, 1000);
 // }
+// const cancelTimer = () => window.cancelAnimationFrame(timerFrameId);
 function starter() {
     switchMode();
     getTimer();
@@ -115,11 +113,15 @@ function randomNumbers() {
     var constants = [];
     var number;
     for (var n = 0; n < +ofNumbers(); n++) {
-        var randomNumber = function () { return Math.floor(Math.random() * (+toNumber() - +fromNumber() + 1)) +
-            +fromNumber(); };
+        var randomNumber = function () { return Math.floor(Math.random() *
+            (+toNumber() - +fromNumber() + 1)) + +fromNumber(); };
         number = randomNumber();
-        constants.push(number != 0 ? number : 1);
-        console.log(constants);
+        if (number === 0) {
+            console.log("0 detected");
+            n--;
+        }
+        else
+            constants.push(number);
     }
     if (lastExample === constants)
         randomNumbers();
@@ -128,30 +130,42 @@ function randomNumbers() {
     return constants;
 }
 function additions() {
+    mode = 1;
     var constants = randomNumbers();
     result = constants.reduce(function (a, b) { return a + b; });
-    output = constants.join(" + ") + " = ";
-    insertResults(true, output);
+    if (lastResult === result) {
+        console.log("corrected results");
+        additions();
+    }
+    else {
+        lastResult = result;
+        output = constants.join(" + ") + " = ";
+        insertResults(true, output);
+    }
 }
 function subtractions() {
+    mode = 2;
     var constants = randomNumbers();
     result = constants.reduce(function (a, b) { return a - b; });
     output = constants.join(" - ") + " = ";
     insertResults(true, output);
 }
 function multiplications() {
+    mode = 3;
     var constants = randomNumbers();
     result = constants.reduce(function (a, b) { return a * b; });
     output = constants.join(" x ") + " = ";
     insertResults(true, output);
 }
 function divisions() {
+    mode = 4;
     var constants = randomNumbers();
     result = Math.round(constants.reduce(function (a, b) { return a / b; }) * 10) / 10;
     output = constants.join(" ÷ ") + " = ";
     insertResults(true, output);
 }
 function eHistoryList(e) {
+    console.log(e);
     if (e.key === "Enter") {
         e.preventDefault();
         var statement = "";
@@ -159,15 +173,17 @@ function eHistoryList(e) {
             statement = "correct";
             score1 += 1;
             sScore1 += 1;
+            answer = "";
             hScore1.innerText = "" + score1;
         }
         else {
             statement = "incorrect";
             score2 += 1;
             sScore2 += 1;
+            answer = "<span class=\"answer\">\n                (".concat(getResults().value, ")</span>");
             hScore2.innerText = "" + score2;
         }
-        historyList.innerHTML += "<span class=\"".concat(statement, "\"> ").concat(output + "" + result, "</span>");
+        historyList.innerHTML += "<span class=\"".concat(statement, "\"> \n            ").concat(output + "" + result, " ").concat(answer, " </span>");
         getResults().value = "";
         switchMode();
         getResults().select();
@@ -178,7 +194,10 @@ function session(sessionN, time, score1, score2) {
     sScore1 = 0;
     sScore2 = 0;
 }
-function switchMode() {
+function switchMode(nsp) {
+    if (nsp === void 0) { nsp = true; }
+    if (!nsp)
+        return insertResults(false);
     switch (mode) {
         case 1:
             additions();
@@ -192,32 +211,9 @@ function switchMode() {
         case 4:
             divisions();
             break;
-        default:
-            additions();
-            break;
+        default: break;
     }
 }
-// function inputRedex() {
-//     //input only numbers
-//     const inputId: string = document.activeElement
-//         ? document.activeElement?.id
-//         : "";
-//     const element = document.getElementById(inputId) as HTMLInputElement;
-//     if (inputId === "settingsNumber") {
-//         // element.value = element.value.replace(/[^2-5]/, "");
-//         // if (element.value.length > 1) element.value = element.value.slice(0, 1);
-//     } else if (inputId === "settingsFrom" || inputId === "settingsTo") {
-//         element.value = element.value
-//             .replace(/[^0-9-]/g, "")
-//             .replace(/(\--*?)\--*/g, "$1")
-//             .replace(/^0[^-]/, "0");
-//     } else if (inputId === "settingsTimer") {
-//         element.value = element.value
-//             .replace(/[^0-9.]/g, "")
-//             .replace(/(\..*?)\..*/g, "$1")
-//             .replace(/^0[^.]/, "0");
-//     }
-// }
 function inputRange() {
     rangeNumber.innerText = "" + ofNumbers();
     rangeFrom.innerText = "" + fromNumber();
@@ -232,5 +228,5 @@ function inputRedexResult() {
         .replace(/(\--*?)\--*/g, "$1");
     getResults().onkeydown = function (e) { return eHistoryList(e); };
 }
-switchMode();
+insertResults(false);
 inputRange();
