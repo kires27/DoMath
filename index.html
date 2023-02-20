@@ -6,30 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="icon" href="https://i.pinimg.com/originals/8e/80/2a/8e802a0b020d2a38f427ac80a70d23b0.png" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style/style.css">
 
     <title>DoMath</title>
 </head>
 <body>
 
     <div class="header">
-        <img src="res/math.png" 
+        <img src="./res/icons/math.svg" 
             class="mathImg" alt="img">
         <h1>DoMath</h1>
     </div>
 
-    <div id="navbar">
-        <div>
-            <div id="additionBar" accesskey="1" onclick="additions()">Addition</div>
-            <div id="subtractionBar" onclick="subtractions()">Subtraction</div>
-        </div>
-        <div>
-            <div id="multiplicationBar" onclick="multiplications()">Multiplication</div>
-            <div id="divisionBar" onclick="divisions()">Division</div>
-        </div>
-    </div>
-
     <div class="content"> 
+        <div id="navbar">
+            <div id="additionBar" accesskey="1" onclick="additions()">
+                <img src="./res/icons/addition.svg" alt="">    
+            </div>
+            <div id="subtractionBar" onclick="subtractions()">
+                <img src="./res/icons/subtraction.svg" alt="">    
+            </div>
+            <div id="multiplicationBar" onclick="multiplications()">
+                <img src="./res/icons/multiplication.svg" alt="">    
+            </div>
+            <div id="divisionBar" onclick="divisions()">
+                <img src="./res/icons/division.svg" alt="">    
+            </div>
+        </div>
+
         <div id="settings">
             <div>
                 <div>
@@ -86,13 +90,19 @@
         </div>
     </div>
 
+    <article></article>
 
     <footer>
-        <img src="res/dalf-01.svg" alt="logo"/> 
-        <a href="LICENCE.txt">© 2023 HAAM apps</a>
+        <img src="./res/haam_static.svg" alt="logo"/> 
+        <a href="./pages/license.html" id="a-license">© 2023 Haam apps</a>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        const footer = document.getElementById("a-license")
+        footer.innerText = `© ${new Date().getFullYear()} Haam apps`;
+    </script>
+
+    <script src="./script/script.js"></script>
 
 </body>
 </html>
