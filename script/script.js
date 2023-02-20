@@ -69,7 +69,7 @@ function starter() {
 }
 function insertResults(condition, output) {
     if (condition) {
-        mExample.innerHTML = "\n            <h2 id=\"mathExample\">".concat(output, "</h2>\n            <input type=\"number\" id=\"resultInput\" inputmode=\"numeric\" \n                class=\"inputs\" oninput=\"inputRedexResult()\">\n        ");
+        mExample.innerHTML = "\n            <h2 id=\"mathExample\">".concat(output, "</h2>\n            <input type=\"text\" id=\"resultInput\" inputmode=\"numeric\" \n                class=\"inputs\" oninput=\"inputRedexResult()\">\n        ");
         getResults().select();
     }
     else {

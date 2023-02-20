@@ -87,7 +87,7 @@ function insertResults(condition: boolean, output?: any) {
     if (condition) {
         mExample.innerHTML = `
             <h2 id="mathExample">${output}</h2>
-            <input type="number" id="resultInput" inputmode="numeric" 
+            <input type="text" id="resultInput" inputmode="numeric" 
                 class="inputs" oninput="inputRedexResult()">
         `;
 
