@@ -42,7 +42,18 @@ let sessionN = 0;
 let lastExample: number[];
 let lastResult: any;
 
-navbar.onclick = () => insertResults(false);
+let highlight: string;
+
+
+navbar.onclick = (e) => {
+    insertResults(false);
+
+    for (const child of navbar.children) {
+        child.classList.remove("highlight");
+        if (child == e.target) child.classList.add("highlight");
+    }
+} 
+
 
 const getTimer = () => {
     const endTime = Date.now() + timerS() * 1000;
@@ -161,9 +172,17 @@ function multiplications() {
 
 function divisions() {
     mode = 4;
-    const constants = randomNumbers();
+    let constants = randomNumbers();
 
-    result = Math.round(constants.reduce((a, b) => a / b)*10)/10;
+    while (
+        (constants.some((e, i, arr) => arr.indexOf(e) !== i))
+        ||
+        (constants.reduce((a, b) => a/b) % 1 !== 0)
+    ) {
+        constants = randomNumbers();
+    }
+
+    result = constants.reduce((a, b) => a / b);
     output = constants.join(" ÷ ") + " = ";
 
     insertResults(true, output);
@@ -225,6 +244,7 @@ function switchMode(nsp: boolean = true) {  // nsp: new session pause
 
     switch (mode) {
         case 1:
+            console.log(mode)
             additions();
             break;
         case 2:

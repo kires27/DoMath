@@ -34,7 +34,16 @@ var mode = 1;
 var sessionN = 0;
 var lastExample;
 var lastResult;
-navbar.onclick = function () { return insertResults(false); };
+var highlight;
+navbar.onclick = function (e) {
+    insertResults(false);
+    for (var _i = 0, _a = navbar.children; _i < _a.length; _i++) {
+        var child = _a[_i];
+        child.classList.remove("highlight");
+        if (child == e.target)
+            child.classList.add("highlight");
+    }
+};
 var getTimer = function () {
     var endTime = Date.now() + timerS() * 1000;
     var repeat;
@@ -42,7 +51,7 @@ var getTimer = function () {
         var present = Date.now();
         var interval = Math.floor((endTime - present) / 1000);
         if (timer())
-            timer().innerText = "".concat(interval);
+            timer().innerText = "" + interval;
         if (interval <= 0) {
             clearInterval(t);
             timer().innerText = "";
@@ -69,7 +78,7 @@ function starter() {
 }
 function insertResults(condition, output) {
     if (condition) {
-        mExample.innerHTML = "\n            <h2 id=\"mathExample\">".concat(output, "</h2>\n            <input type=\"text\" id=\"resultInput\" inputmode=\"numeric\" \n                class=\"inputs\" oninput=\"inputRedexResult()\">\n        ");
+        mExample.innerHTML = "\n            <h2 id=\"mathExample\">" + output + "</h2>\n            <input type=\"text\" id=\"resultInput\" inputmode=\"numeric\" \n                class=\"inputs\" oninput=\"inputRedexResult()\">\n        ";
         getResults().select();
     }
     else {
@@ -125,7 +134,12 @@ function multiplications() {
 function divisions() {
     mode = 4;
     var constants = randomNumbers();
-    result = Math.round(constants.reduce(function (a, b) { return a / b; }) * 10) / 10;
+    while ((constants.some(function (e, i, arr) { return arr.indexOf(e) !== i; }))
+        ||
+            (constants.reduce(function (a, b) { return a / b; }) % 1 !== 0)) {
+        constants = randomNumbers();
+    }
+    result = constants.reduce(function (a, b) { return a / b; });
     output = constants.join(" ÷ ") + " = ";
     insertResults(true, output);
 }
@@ -144,10 +158,10 @@ function eHistoryList(e) {
             statement = "incorrect";
             score2 += 1;
             sScore2 += 1;
-            answer = "<span class=\"answer\">\n                (".concat(getResults().value, ")</span>");
+            answer = "<span class=\"answer\">\n                (" + getResults().value + ")</span>";
             hScore2.innerText = "" + score2;
         }
-        historyList.innerHTML += "<span class=\"".concat(statement, "\"> \n            ").concat(output + "" + result, " ").concat(answer, " </span>");
+        historyList.innerHTML += "<span class=\"" + statement + "\"> \n            " + (output + "" + result) + " " + answer + " </span>";
         getResults().value = "";
         switchMode();
         getResults().select();
@@ -155,7 +169,7 @@ function eHistoryList(e) {
     }
 }
 function session(sessionN, time, score1, score2) {
-    historyList.innerHTML += "\n    <div class=\"historyScore\">\n        <p id=\"sessionScore1\" class=\"correct\">".concat(score1, "</p>\n        <p>-</p>\n        <p id=\"sessionScore2\" class=\"incorrect\">").concat(score2, "</p>\n    </div>\n    <h3 class=\"sessionTitle\">Session ").concat(sessionN, " - ").concat(time, " sec</h3>\n    ");
+    historyList.innerHTML += "\n    <div class=\"historyScore\">\n        <p id=\"sessionScore1\" class=\"correct\">" + score1 + "</p>\n        <p>-</p>\n        <p id=\"sessionScore2\" class=\"incorrect\">" + score2 + "</p>\n    </div>\n    <h3 class=\"sessionTitle\">Session " + sessionN + " - " + time + " sec</h3>\n    ";
     sScore1 = 0;
     sScore2 = 0;
 }
@@ -165,6 +179,7 @@ function switchMode(nsp) {
         return insertResults(false);
     switch (mode) {
         case 1:
+            console.log(mode);
             additions();
             break;
         case 2:

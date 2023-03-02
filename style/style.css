@@ -88,15 +88,13 @@ body {
                 padding: 10px var(--s_navbar);
                 cursor: pointer;
                 transition: all .3s ease-in-out;
-            }
-                #navbar div:hover {
-                    background-color: var(--c_button_h);
-                }
-                
+            } 
             #navbar div img {
                 width: 1.5rem;
                 filter: invert(1);
-
+            }
+            .highlight {
+                background-color: var(--c_button_h);
             }
             
 
