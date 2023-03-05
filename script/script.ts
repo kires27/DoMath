@@ -1,4 +1,8 @@
 const navbar = document.getElementById("navbar") as HTMLDivElement;
+const additionBar = document.getElementById("additionBar") as HTMLDivElement;
+const subtractionBar = document.getElementById("subtractionBar") as HTMLDivElement;
+const multiplicationBar = document.getElementById("multiplicationBar") as HTMLDivElement;
+const divisionBar = document.getElementById("divisionBar") as HTMLDivElement;
 
 const timer = () => document.getElementById("timer") as HTMLDivElement;
 const mExample = document.getElementById("mathExample") as HTMLDivElement;
@@ -42,18 +46,29 @@ let sessionN = 0;
 let lastExample: number[];
 let lastResult: any;
 
-let highlight: string;
-
 
 navbar.onclick = (e) => {
     insertResults(false);
-
-    for (const child of navbar.children) {
-        child.classList.remove("highlight");
-        if (child == e.target) child.classList.add("highlight");
-    }
 } 
 
+
+function highlight(mode: number) {
+    for (const child of navbar.children) {
+        child.className = "unhighlight"
+    }
+
+    switch(mode) {
+        case 1:
+            additionBar.className = "highlight"; break;
+        case 2:
+            subtractionBar.className = "highlight"; break;
+        case 3:
+            multiplicationBar.className = "highlight"; break;
+        case 4:
+            divisionBar.className = "highlight"; break;
+        default: break;
+    }
+}
 
 const getTimer = () => {
     const endTime = Date.now() + timerS() * 1000;
@@ -134,6 +149,8 @@ function randomNumbers() {
 
 function additions() {
     mode = 1;
+    highlight(mode);
+
     const constants = randomNumbers();
 
     result = constants.reduce((a, b) => a + b);
@@ -152,6 +169,8 @@ function additions() {
 
 function subtractions() {
     mode = 2;
+    highlight(mode);    
+
     const constants = randomNumbers();
 
     result = constants.reduce((a, b) => a - b);
@@ -162,6 +181,8 @@ function subtractions() {
 
 function multiplications() {
     mode = 3;
+    highlight(mode);    
+
     const constants = randomNumbers();
 
     result = constants.reduce((a, b) => a * b);
@@ -172,6 +193,8 @@ function multiplications() {
 
 function divisions() {
     mode = 4;
+    highlight(mode);    
+
     let constants = randomNumbers();
 
     while (

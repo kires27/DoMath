@@ -1,57 +1,65 @@
-var navbar = document.getElementById("navbar");
-var timer = function () { return document.getElementById("timer"); };
-var mExample = document.getElementById("mathExample");
-var historyList = document.getElementById("historyList");
-var ofNumbers = function () {
-    return document.getElementById("settingsNumber").value;
-};
-var fromNumber = function () {
-    return document.getElementById("settingsFrom").value;
-};
-var toNumber = function () {
-    return document.getElementById("settingsTo").value;
-};
-var timerS = function () {
-    return +document.getElementById("settingsTimer").value;
-};
-var getResults = function () {
-    return document.getElementById("resultInput");
-};
-var hScore1 = document.getElementById("historyScore1");
-var hScore2 = document.getElementById("historyScore2");
-var rangeNumber = document.getElementById("rangeNumber");
-var rangeFrom = document.getElementById("rangeFrom");
-var rangeTo = document.getElementById("rangeTo");
-var rangeTimer = document.getElementById("rangeTimer");
-var result = 1;
-var output;
-var answer;
-var score1 = 0;
-var score2 = 0;
-var sScore1 = 0;
-var sScore2 = 0;
-var mode = 1;
-var sessionN = 0;
-var lastExample;
-var lastResult;
-var highlight;
-navbar.onclick = function (e) {
+"use strict";
+const navbar = document.getElementById("navbar");
+const additionBar = document.getElementById("additionBar");
+const subtractionBar = document.getElementById("subtractionBar");
+const multiplicationBar = document.getElementById("multiplicationBar");
+const divisionBar = document.getElementById("divisionBar");
+const timer = () => document.getElementById("timer");
+const mExample = document.getElementById("mathExample");
+const historyList = document.getElementById("historyList");
+const ofNumbers = () => document.getElementById("settingsNumber").value;
+const fromNumber = () => document.getElementById("settingsFrom").value;
+const toNumber = () => document.getElementById("settingsTo").value;
+const timerS = () => +document.getElementById("settingsTimer").value;
+const getResults = () => document.getElementById("resultInput");
+const hScore1 = document.getElementById("historyScore1");
+const hScore2 = document.getElementById("historyScore2");
+const rangeNumber = document.getElementById("rangeNumber");
+const rangeFrom = document.getElementById("rangeFrom");
+const rangeTo = document.getElementById("rangeTo");
+const rangeTimer = document.getElementById("rangeTimer");
+let result = 1;
+let output;
+let answer;
+let score1 = 0;
+let score2 = 0;
+let sScore1 = 0;
+let sScore2 = 0;
+let mode = 1;
+let sessionN = 0;
+let lastExample;
+let lastResult;
+navbar.onclick = (e) => {
     insertResults(false);
-    for (var _i = 0, _a = navbar.children; _i < _a.length; _i++) {
-        var child = _a[_i];
-        child.classList.remove("highlight");
-        if (child == e.target)
-            child.classList.add("highlight");
-    }
 };
-var getTimer = function () {
-    var endTime = Date.now() + timerS() * 1000;
-    var repeat;
-    var t = setInterval(function () {
-        var present = Date.now();
-        var interval = Math.floor((endTime - present) / 1000);
+function highlight(mode) {
+    for (const child of navbar.children) {
+        child.className = "unhighlight";
+    }
+    switch (mode) {
+        case 1:
+            additionBar.className = "highlight";
+            break;
+        case 2:
+            subtractionBar.className = "highlight";
+            break;
+        case 3:
+            multiplicationBar.className = "highlight";
+            break;
+        case 4:
+            divisionBar.className = "highlight";
+            break;
+        default: break;
+    }
+}
+const getTimer = () => {
+    const endTime = Date.now() + timerS() * 1000;
+    let repeat;
+    let t = setInterval(() => {
+        let present = Date.now();
+        let interval = Math.floor((endTime - present) / 1000);
         if (timer())
-            timer().innerText = "" + interval;
+            timer().innerText = `${interval}`;
         if (interval <= 0) {
             clearInterval(t);
             timer().innerText = "";
@@ -59,7 +67,7 @@ var getTimer = function () {
             session(sessionN, timerS(), sScore1, sScore2);
             switchMode(false);
         }
-        navbar.onclick = function () {
+        navbar.onclick = () => {
             insertResults(false);
             if (interval) {
                 clearInterval(t);
@@ -78,19 +86,25 @@ function starter() {
 }
 function insertResults(condition, output) {
     if (condition) {
-        mExample.innerHTML = "\n            <h2 id=\"mathExample\">" + output + "</h2>\n            <input type=\"text\" id=\"resultInput\" inputmode=\"numeric\" \n                class=\"inputs\" oninput=\"inputRedexResult()\">\n        ";
+        mExample.innerHTML = `
+            <h2 id="mathExample">${output}</h2>
+            <input type="text" id="resultInput" inputmode="numeric" 
+                class="inputs" oninput="inputRedexResult()">
+        `;
         getResults().select();
     }
     else {
-        mExample.innerHTML = "<button class=\"starter\" \n            onclick=\"starter()\">START</button>\n        ";
+        mExample.innerHTML = `<button class="starter" 
+            onclick="starter()">START</button>
+        `;
     }
 }
 function randomNumbers() {
-    var constants = [];
-    var number;
-    for (var n = 0; n < +ofNumbers(); n++) {
-        var randomNumber = function () { return Math.floor(Math.random() *
-            (+toNumber() - +fromNumber() + 1)) + +fromNumber(); };
+    const constants = [];
+    let number;
+    for (let n = 0; n < +ofNumbers(); n++) {
+        const randomNumber = () => Math.floor(Math.random() *
+            (+toNumber() - +fromNumber() + 1)) + +fromNumber();
         number = randomNumber();
         if (number === 0) {
             n--;
@@ -106,8 +120,9 @@ function randomNumbers() {
 }
 function additions() {
     mode = 1;
-    var constants = randomNumbers();
-    result = constants.reduce(function (a, b) { return a + b; });
+    highlight(mode);
+    const constants = randomNumbers();
+    result = constants.reduce((a, b) => a + b);
     if (lastResult === result) {
         additions();
     }
@@ -119,34 +134,37 @@ function additions() {
 }
 function subtractions() {
     mode = 2;
-    var constants = randomNumbers();
-    result = constants.reduce(function (a, b) { return a - b; });
+    highlight(mode);
+    const constants = randomNumbers();
+    result = constants.reduce((a, b) => a - b);
     output = constants.join(" - ") + " = ";
     insertResults(true, output);
 }
 function multiplications() {
     mode = 3;
-    var constants = randomNumbers();
-    result = constants.reduce(function (a, b) { return a * b; });
+    highlight(mode);
+    const constants = randomNumbers();
+    result = constants.reduce((a, b) => a * b);
     output = constants.join(" x ") + " = ";
     insertResults(true, output);
 }
 function divisions() {
     mode = 4;
-    var constants = randomNumbers();
-    while ((constants.some(function (e, i, arr) { return arr.indexOf(e) !== i; }))
+    highlight(mode);
+    let constants = randomNumbers();
+    while ((constants.some((e, i, arr) => arr.indexOf(e) !== i))
         ||
-            (constants.reduce(function (a, b) { return a / b; }) % 1 !== 0)) {
+            (constants.reduce((a, b) => a / b) % 1 !== 0)) {
         constants = randomNumbers();
     }
-    result = constants.reduce(function (a, b) { return a / b; });
+    result = constants.reduce((a, b) => a / b);
     output = constants.join(" ÷ ") + " = ";
     insertResults(true, output);
 }
 function eHistoryList(e) {
     if (e.key === "Enter") {
         e.preventDefault();
-        var statement = "";
+        let statement = "";
         if (result === +getResults().value) {
             statement = "correct";
             score1 += 1;
@@ -158,10 +176,12 @@ function eHistoryList(e) {
             statement = "incorrect";
             score2 += 1;
             sScore2 += 1;
-            answer = "<span class=\"answer\">\n                (" + getResults().value + ")</span>";
+            answer = `<span class="answer">
+                (${getResults().value})</span>`;
             hScore2.innerText = "" + score2;
         }
-        historyList.innerHTML += "<span class=\"" + statement + "\"> \n            " + (output + "" + result) + " " + answer + " </span>";
+        historyList.innerHTML += `<span class="${statement}"> 
+            ${output + "" + result} ${answer} </span>`;
         getResults().value = "";
         switchMode();
         getResults().select();
@@ -169,12 +189,18 @@ function eHistoryList(e) {
     }
 }
 function session(sessionN, time, score1, score2) {
-    historyList.innerHTML += "\n    <div class=\"historyScore\">\n        <p id=\"sessionScore1\" class=\"correct\">" + score1 + "</p>\n        <p>-</p>\n        <p id=\"sessionScore2\" class=\"incorrect\">" + score2 + "</p>\n    </div>\n    <h3 class=\"sessionTitle\">Session " + sessionN + " - " + time + " sec</h3>\n    ";
+    historyList.innerHTML += `
+    <div class="historyScore">
+        <p id="sessionScore1" class="correct">${score1}</p>
+        <p>-</p>
+        <p id="sessionScore2" class="incorrect">${score2}</p>
+    </div>
+    <h3 class="sessionTitle">Session ${sessionN} - ${time} sec</h3>
+    `;
     sScore1 = 0;
     sScore2 = 0;
 }
-function switchMode(nsp) {
-    if (nsp === void 0) { nsp = true; }
+function switchMode(nsp = true) {
     if (!nsp)
         return insertResults(false);
     switch (mode) {
@@ -206,7 +232,7 @@ function inputRedexResult() {
         .replace(/[^-0-9.]/g, "")
         .replace(/(\..*?)\..*/g, "$1")
         .replace(/(\--*?)\--*/g, "$1");
-    getResults().onkeydown = function (e) { return eHistoryList(e); };
+    getResults().onkeydown = (e) => eHistoryList(e);
 }
 insertResults(false);
 inputRange();

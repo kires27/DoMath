@@ -63,39 +63,37 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    /* gap: 1.5rem; */
     margin: 1rem;
     justify-content: center;
 }
-    .content * {
-        /* width: 100%; */
+    #navbar {
+        display: flex;
+        justify-content: center;
+        column-gap: 2vw;
+        width: var(--s_container);
     }
-        #navbar {
+        #navbar div {
             display: flex;
             justify-content: center;
-            column-gap: 2vw;
-            width: var(--s_container);
+            align-items: center;
+            width: fit-content;
+            border-radius: 30px;
+            width: var(--s_navbar);
+            height: fit-content;
+            padding: 10px var(--s_navbar);
+            cursor: pointer;
+            transition: all .3s ease-in-out;
+        } 
+        #navbar div img {
+            width: 1.5rem;
+            filter: invert(1);
         }
-            #navbar div {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                width: fit-content;
-                background-color: var(--c_button);
-                border-radius: 30px;
-                width: var(--s_navbar);
-                height: fit-content;
-                padding: 10px var(--s_navbar);
-                cursor: pointer;
-                transition: all .3s ease-in-out;
-            } 
-            #navbar div img {
-                width: 1.5rem;
-                filter: invert(1);
-            }
-            .highlight {
-                background-color: var(--c_button_h);
-            }
+        .unhighlight {
+            background-color: var(--c_button);
+        }
+        .highlight {
+            background-color: var(--c_button_h);
+        }
             
 
     #settings {
@@ -175,7 +173,6 @@ body {
         .starter {
             border: none;
             color: var(--c_text);
-            /* width: 33%; */
             font-size: 15px;
             border-radius: 10px;
             padding: 10px 20px;
@@ -273,12 +270,6 @@ footer {
 
     }
 
-
-@media only screen and (max-width: 630px) {
-    /* body {
-        padding: 0;
-    } */
-}
 
 ::-webkit-scrollbar {
     width: 10px;
